@@ -2125,56 +2125,133 @@ const initializeFormElements = () => {
    * Sign Typed Data V4
    */
   signTypedDataV4.onclick = async () => {
+    // const msgParams = {
+    //   domain: {
+    //     chainId: chainIdInt.toString(),
+    //     name: 'Ether Mail',
+    //     verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    //     version: '1',
+    //   },
+    //   message: {
+    //     contents: 'Hello, Bob!',
+    //     from: {
+    //       name: 'Cow',
+    //       wallets: [
+    //         '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+    //         '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+    //       ],
+    //     },
+    //     to: [
+    //       {
+    //         name: 'Bob',
+    //         wallets: [
+    //           '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+    //           '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+    //           '0xB0B0b0b0b0b0B000000000000000000000000000',
+    //         ],
+    //       },
+    //     ],
+    //     attachment: '0x',
+    //   },
+    //   primaryType: 'Mail',
+    //   types: {
+    //     EIP712Domain: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'version', type: 'string' },
+    //       { name: 'chainId', type: 'uint256' },
+    //       { name: 'verifyingContract', type: 'address' },
+    //     ],
+    //     Group: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'members', type: 'Person[]' },
+    //     ],
+    //     Mail: [
+    //       { name: 'from', type: 'Person' },
+    //       { name: 'to', type: 'Person[]' },
+    //       { name: 'contents', type: 'string' },
+    //       { name: 'attachment', type: 'bytes' },
+    //     ],
+    //     Person: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'wallets', type: 'address[]' },
+    //     ],
+    //   },
+    // };
     const msgParams = {
       domain: {
-        chainId: chainIdInt.toString(),
-        name: 'Ether Mail',
+        // This defines the network, in this case, Mainnet.
+        chainId: 1,
+        // Give a user-friendly name to the specific contract you're signing for.
+        name: 'Omniverse Transaction',
+        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
         verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+        // This identifies the latest version.
         version: '1',
       },
+  
+      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
+      // anything you want. There are no required fields. Be as explicit as possible when building out
+      // the message schema.
       message: {
-        contents: 'Hello, Bob!',
-        from: {
-          name: 'Cow',
-          wallets: [
-            '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-            '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
-          ],
-        },
-        to: [
-          {
-            name: 'Bob',
-            wallets: [
-              '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-              '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
-              '0xB0B0b0b0b0b0B000000000000000000000000000',
-            ],
+        tx_type: 'Deploy',
+        detail: {
+          metadata: {
+            salt: "0x1122334455667788",
+            name: "test_token",
+            deployer: "0x1122334455667788112233445566778811223344556677881122334455667788",
+            limit: "1234605616436508552",
+            price: "1234605616436508552",
+            total_supply: "1234605616436508552"
           },
-        ],
-        attachment: '0x',
+          fee_inputs: [{
+            txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+            index: "287454020",
+            amount: "1234605616436508552",
+            address: "0x20c7141c90c2346eae1c07e739222ae815b7fa839ea7931e27340bedb3603c70"
+          }],
+          fee_outputs: [{
+            address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+            amount: "1234605616436508552"
+          }]
+        }
       },
-      primaryType: 'Mail',
+      // This refers to the keys of the following types object.
+      primaryType: 'OmniverseUTXO',
       types: {
+        // This refers to the domain the contract is hosted on.
         EIP712Domain: [
           { name: 'name', type: 'string' },
           { name: 'version', type: 'string' },
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' },
         ],
-        Group: [
+        Deploy: [
+          { name: 'metadata', type: 'DeployMetadata' },
+          { name: 'fee_inputs', type: 'Input[]' },
+          { name: 'fee_outputs', type: 'Output[]' }
+        ],
+        OmniverseUTXO: [
+          { name: 'tx_type', type: 'string' },
+          { name: 'detail', type: 'Deploy' }
+        ],
+        DeployMetadata: [
+          { name: 'salt', type: 'bytes8' },
           { name: 'name', type: 'string' },
-          { name: 'members', type: 'Person[]' },
+          { name: 'deployer', type: 'bytes32' },
+          { name: 'limit', type: 'uint128' },
+          { name: 'price', type: 'uint128' },
+          { name: 'total_supply', type: 'uint128' }
         ],
-        Mail: [
-          { name: 'from', type: 'Person' },
-          { name: 'to', type: 'Person[]' },
-          { name: 'contents', type: 'string' },
-          { name: 'attachment', type: 'bytes' },
+        Input: [
+          { name: 'txid', type: 'bytes32' },
+          { name: 'index', type: 'uint32' },
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
         ],
-        Person: [
-          { name: 'name', type: 'string' },
-          { name: 'wallets', type: 'address[]' },
-        ],
+        Output: [
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ]
       },
     };
     try {
@@ -2197,33 +2274,20 @@ const initializeFormElements = () => {
   signTypedDataV4Verify.onclick = async () => {
     const msgParams = {
       domain: {
-        chainId: chainIdInt,
+        chainId: chainIdInt.toString(),
         name: 'Ether Mail',
         verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
         version: '1',
       },
       message: {
-        contents: 'Hello, Bob!',
-        from: {
-          name: 'Cow',
-          wallets: [
-            '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-            '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
-          ],
-        },
-        to: [
-          {
-            name: 'Bob',
-            wallets: [
-              '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-              '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
-              '0xB0B0b0b0b0b0B000000000000000000000000000',
-            ],
-          },
-        ],
-        attachment: '0x',
+        nonce: 111,
+        chainId: 22,
+        initiateSC: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        from: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        payload: '0xd9145CCE52D386f254917e481eB44e9943F39138',
+        signature: '0xd9145CCE52D386f254917e481eB44e9943F39138',
       },
-      primaryType: 'Mail',
+      primaryType: 'ERC6358TransactionData',
       types: {
         EIP712Domain: [
           { name: 'name', type: 'string' },
@@ -2231,22 +2295,68 @@ const initializeFormElements = () => {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' },
         ],
-        Group: [
-          { name: 'name', type: 'string' },
-          { name: 'members', type: 'Person[]' },
-        ],
-        Mail: [
-          { name: 'from', type: 'Person' },
-          { name: 'to', type: 'Person[]' },
-          { name: 'contents', type: 'string' },
-          { name: 'attachment', type: 'bytes' },
-        ],
-        Person: [
-          { name: 'name', type: 'string' },
-          { name: 'wallets', type: 'address[]' },
+        ERC6358TransactionData: [
+          { name: 'nonce', type: 'uint128' },
+          { name: 'chainId', type: 'uint32' },
+          { name: 'initiateSC', type: 'bytes' },
+          { name: 'from', type: 'bytes' },
+          { name: 'payload', type: 'bytes' },
+          { name: 'signature', type: 'bytes' },
         ],
       },
     };
+    // const msgParams = {
+    //   domain: {
+    //     chainId: chainIdInt,
+    //     name: 'Ether Mail',
+    //     verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+    //     version: '1',
+    //   },
+    //   message: {
+    //     contents: 'Hello, Bob!',
+    //     from: {
+    //       name: 'Cow',
+    //       wallets: [
+    //         '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+    //         '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+    //       ],
+    //     },
+    //     to: [
+    //       {
+    //         name: 'Bob',
+    //         wallets: [
+    //           '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+    //           '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+    //           '0xB0B0b0b0b0b0B000000000000000000000000000',
+    //         ],
+    //       },
+    //     ],
+    //     attachment: '0x',
+    //   },
+    //   primaryType: 'Mail',
+    //   types: {
+    //     EIP712Domain: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'version', type: 'string' },
+    //       { name: 'chainId', type: 'uint256' },
+    //       { name: 'verifyingContract', type: 'address' },
+    //     ],
+    //     Group: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'members', type: 'Person[]' },
+    //     ],
+    //     Mail: [
+    //       { name: 'from', type: 'Person' },
+    //       { name: 'to', type: 'Person[]' },
+    //       { name: 'contents', type: 'string' },
+    //       { name: 'attachment', type: 'bytes' },
+    //     ],
+    //     Person: [
+    //       { name: 'name', type: 'string' },
+    //       { name: 'wallets', type: 'address[]' },
+    //     ],
+    //   },
+    // };
     try {
       const from = accounts[0];
       const sign = signTypedDataV4Result.innerHTML;
