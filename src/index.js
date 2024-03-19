@@ -2262,6 +2262,212 @@ const initializeFormElements = () => {
     }
   };
 
+  async function deploy(data) {
+    const msgParams = {
+      domain: {
+        // This defines the network, in this case, Mainnet.
+        chainId: 1,
+        // Give a user-friendly name to the specific contract you're signing for.
+        name: 'Omniverse Transaction',
+        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
+        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+        // This identifies the latest version.
+        version: '1',
+      },
+  
+      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
+      // anything you want. There are no required fields. Be as explicit as possible when building out
+      // the message schema.
+      message: {
+        tx_type: 'Deploy',
+        detail: data
+      },
+      // This refers to the keys of the following types object.
+      primaryType: 'OmniverseUTXO',
+      types: {
+        // This refers to the domain the contract is hosted on.
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' },
+        ],
+        Deploy: [
+          { name: 'metadata', type: 'DeployMetadata' },
+          { name: 'fee_inputs', type: 'Input[]' },
+          { name: 'fee_outputs', type: 'Output[]' }
+        ],
+        OmniverseUTXO: [
+          { name: 'tx_type', type: 'string' },
+          { name: 'detail', type: 'Deploy' }
+        ],
+        DeployMetadata: [
+          { name: 'salt', type: 'bytes8' },
+          { name: 'name', type: 'string' },
+          { name: 'deployer', type: 'bytes32' },
+          { name: 'limit', type: 'uint128' },
+          { name: 'price', type: 'uint128' },
+          { name: 'total_supply', type: 'uint128' }
+        ],
+        Input: [
+          { name: 'txid', type: 'bytes32' },
+          { name: 'index', type: 'uint32' },
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ],
+        Output: [
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ]
+      },
+    };
+    try {
+      const from = accounts[0];
+      const sign = await provider.request({
+        method: 'eth_signTypedData_v4',
+        params: [from, JSON.stringify(msgParams)],
+      });
+      signTypedDataV4Result.innerHTML = sign;
+      signTypedDataV4Verify.disabled = false;
+    } catch (err) {
+      console.error(err);
+      signTypedDataV4Result.innerHTML = `Error: ${err.message}`;
+    }
+  }
+
+  async function mint(data) {
+    const msgParams = {
+      domain: {
+        // This defines the network, in this case, Mainnet.
+        chainId: 1,
+        // Give a user-friendly name to the specific contract you're signing for.
+        name: 'Omniverse Transaction',
+        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
+        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+        // This identifies the latest version.
+        version: '1',
+      },
+  
+      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
+      // anything you want. There are no required fields. Be as explicit as possible when building out
+      // the message schema.
+      message: {
+        tx_type: 'Mint',
+        detail: data
+      },
+      // This refers to the keys of the following types object.
+      primaryType: 'OmniverseUTXO',
+      types: {
+        // This refers to the domain the contract is hosted on.
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' },
+        ],
+        Mint: [
+          { name: 'asset_id', type: 'bytes32' },
+          { name: 'outputs', type: 'Output[]' },
+          { name: 'fee_inputs', type: 'Input[]' },
+          { name: 'fee_outputs', type: 'Output[]' }
+        ],
+        OmniverseUTXO: [
+          { name: 'tx_type', type: 'string' },
+          { name: 'detail', type: 'Mint' }
+        ],
+        Input: [
+          { name: 'txid', type: 'bytes32' },
+          { name: 'index', type: 'uint32' },
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ],
+        Output: [
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ]
+      },
+    };
+    try {
+      const from = accounts[0];
+      const sign = await provider.request({
+        method: 'eth_signTypedData_v4',
+        params: [from, JSON.stringify(msgParams)],
+      });
+      signTypedDataV4Result.innerHTML = sign;
+      signTypedDataV4Verify.disabled = false;
+    } catch (err) {
+      console.error(err);
+      signTypedDataV4Result.innerHTML = `Error: ${err.message}`;
+    }
+  }
+
+  async function transfer(data) {
+    const msgParams = {
+      domain: {
+        // This defines the network, in this case, Mainnet.
+        chainId: 1,
+        // Give a user-friendly name to the specific contract you're signing for.
+        name: 'Omniverse Transaction',
+        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
+        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+        // This identifies the latest version.
+        version: '1',
+      },
+  
+      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
+      // anything you want. There are no required fields. Be as explicit as possible when building out
+      // the message schema.
+      message: {
+        tx_type: 'Transfer',
+        detail: data
+      },
+      // This refers to the keys of the following types object.
+      primaryType: 'OmniverseUTXO',
+      types: {
+        // This refers to the domain the contract is hosted on.
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' },
+        ],
+        Transfer: [
+          { name: 'asset_id', type: 'bytes32' },
+          { name: 'inputs', type: 'Input[]' },
+          { name: 'outputs', type: 'Output[]' },
+          { name: 'fee_inputs', type: 'Input[]' },
+          { name: 'fee_outputs', type: 'Output[]' }
+        ],
+        OmniverseUTXO: [
+          { name: 'tx_type', type: 'string' },
+          { name: 'detail', type: 'Transfer' }
+        ],
+        Input: [
+          { name: 'txid', type: 'bytes32' },
+          { name: 'index', type: 'uint32' },
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ],
+        Output: [
+          { name: 'amount', type: 'uint128' },
+          { name: 'address', type: 'bytes32' }
+        ]
+      },
+    };
+    try {
+      const from = accounts[0];
+      const sign = await provider.request({
+        method: 'eth_signTypedData_v4',
+        params: [from, JSON.stringify(msgParams)],
+      });
+      signTypedDataV4Result.innerHTML = sign;
+      signTypedDataV4Verify.disabled = false;
+    } catch (err) {
+      console.error(err);
+      signTypedDataV4Result.innerHTML = `Error: ${err.message}`;
+    }
+  }
+
   /**
    * Sign Typed Data V3 Verification
    */
@@ -2328,147 +2534,66 @@ const initializeFormElements = () => {
    * Sign Typed Data V4
    */
   signTypedDataV4.onclick = async () => {
-    // const msgParams = {
-    //   domain: {
-    //     chainId: chainIdInt.toString(),
-    //     name: 'Ether Mail',
-    //     verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
-    //     version: '1',
+    // await deploy({
+    //   metadata: {
+    //     salt: "0x1122334455667788",
+    //     name: "test_token",
+    //     deployer: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     limit: "1234605616436508552",
+    //     price: "1234605616436508552",
+    //     total_supply: "1234605616436508552"
     //   },
-    //   message: {
-    //     contents: 'Hello, Bob!',
-    //     from: {
-    //       name: 'Cow',
-    //       wallets: [
-    //         '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-    //         '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
-    //       ],
-    //     },
-    //     to: [
-    //       {
-    //         name: 'Bob',
-    //         wallets: [
-    //           '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-    //           '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
-    //           '0xB0B0b0b0b0b0B000000000000000000000000000',
-    //         ],
-    //       },
-    //     ],
-    //     attachment: '0x',
-    //   },
-    //   primaryType: 'Mail',
-    //   types: {
-    //     EIP712Domain: [
-    //       { name: 'name', type: 'string' },
-    //       { name: 'version', type: 'string' },
-    //       { name: 'chainId', type: 'uint256' },
-    //       { name: 'verifyingContract', type: 'address' },
-    //     ],
-    //     Group: [
-    //       { name: 'name', type: 'string' },
-    //       { name: 'members', type: 'Person[]' },
-    //     ],
-    //     Mail: [
-    //       { name: 'from', type: 'Person' },
-    //       { name: 'to', type: 'Person[]' },
-    //       { name: 'contents', type: 'string' },
-    //       { name: 'attachment', type: 'bytes' },
-    //     ],
-    //     Person: [
-    //       { name: 'name', type: 'string' },
-    //       { name: 'wallets', type: 'address[]' },
-    //     ],
-    //   },
-    // };
-    const msgParams = {
-      domain: {
-        // This defines the network, in this case, Mainnet.
-        chainId: 1,
-        // Give a user-friendly name to the specific contract you're signing for.
-        name: 'Omniverse Transaction',
-        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
-        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
-        // This identifies the latest version.
-        version: '1',
-      },
-  
-      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
-      // anything you want. There are no required fields. Be as explicit as possible when building out
-      // the message schema.
-      message: {
-        tx_type: 'Deploy',
-        detail: {
-          metadata: {
-            salt: "0x1122334455667788",
-            name: "test_token",
-            deployer: "0x1122334455667788112233445566778811223344556677881122334455667788",
-            limit: "1234605616436508552",
-            price: "1234605616436508552",
-            total_supply: "1234605616436508552"
-          },
-          fee_inputs: [{
-            txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
-            index: "287454020",
-            amount: "1234605616436508552",
-            address: "0x20c7141c90c2346eae1c07e739222ae815b7fa839ea7931e27340bedb3603c70"
-          }],
-          fee_outputs: [{
-            address: "0x1122334455667788112233445566778811223344556677881122334455667788",
-            amount: "1234605616436508552"
-          }]
-        }
-      },
-      // This refers to the keys of the following types object.
-      primaryType: 'OmniverseUTXO',
-      types: {
-        // This refers to the domain the contract is hosted on.
-        EIP712Domain: [
-          { name: 'name', type: 'string' },
-          { name: 'version', type: 'string' },
-          { name: 'chainId', type: 'uint256' },
-          { name: 'verifyingContract', type: 'address' },
-        ],
-        Deploy: [
-          { name: 'metadata', type: 'DeployMetadata' },
-          { name: 'fee_inputs', type: 'Input[]' },
-          { name: 'fee_outputs', type: 'Output[]' }
-        ],
-        OmniverseUTXO: [
-          { name: 'tx_type', type: 'string' },
-          { name: 'detail', type: 'Deploy' }
-        ],
-        DeployMetadata: [
-          { name: 'salt', type: 'bytes8' },
-          { name: 'name', type: 'string' },
-          { name: 'deployer', type: 'bytes32' },
-          { name: 'limit', type: 'uint128' },
-          { name: 'price', type: 'uint128' },
-          { name: 'total_supply', type: 'uint128' }
-        ],
-        Input: [
-          { name: 'txid', type: 'bytes32' },
-          { name: 'index', type: 'uint32' },
-          { name: 'amount', type: 'uint128' },
-          { name: 'address', type: 'bytes32' }
-        ],
-        Output: [
-          { name: 'amount', type: 'uint128' },
-          { name: 'address', type: 'bytes32' }
-        ]
-      },
-    };
-    try {
-      const from = accounts[0];
-      const sign = await provider.request({
-        method: 'eth_signTypedData_v4',
-        params: [from, JSON.stringify(msgParams)],
-      });
-      signTypedDataV4Result.innerHTML = sign;
-      signTypedDataV4Verify.disabled = false;
-    } catch (err) {
-      console.error(err);
-      signTypedDataV4Result.innerHTML = `Error: ${err.message}`;
-    }
+    //   fee_inputs: [{
+    //     txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     index: "287454020",
+    //     amount: "1234605616436508552",
+    //     address: "0x20c7141c90c2346eae1c07e739222ae815b7fa839ea7931e27340bedb3603c70"
+    //   }],
+    //   fee_outputs: [{
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     amount: "1234605616436508552"
+    //   }]
+    // });
+    // await mint({
+    //   asset_id: '0x1122334455667788112233445566778811223344556677881122334455667788',
+    //   outputs: [{
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     amount: "1234605616436508552"
+    //   }],
+    //   fee_inputs: [{
+    //     txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     index: "287454020",
+    //     amount: "1234605616436508552",
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+    //   }],
+    //   fee_outputs: [{
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     amount: "1234605616436508552"
+    //   }]
+    // });
+    await transfer({
+      asset_id: '0x1122334455667788112233445566778811223344556677881122334455667788',
+      inputs: [{
+        txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        index: "287454020",
+        amount: "1234605616436508552",
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+      }],
+      outputs: [{
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        amount: "1234605616436508552"
+      }],
+      fee_inputs: [{
+        txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        index: "287454020",
+        amount: "1234605616436508552",
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+      }],
+      fee_outputs: [{
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        amount: "1234605616436508552"
+      }]
+    });
   };
 
   /**
