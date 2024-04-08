@@ -2279,11 +2279,17 @@ const initializeFormElements = () => {
       // anything you want. There are no required fields. Be as explicit as possible when building out
       // the message schema.
       message: {
-        tx_type: 'Deploy',
-        detail: data
+        salt: data.metadata.salt,
+        name: data.metadata.name,
+        deployer: data.metadata.deployer,
+        limit: data.metadata.limit,
+        price: data.metadata.price,
+        total_supply: data.metadata.total_supply,
+        fee_inputs: data.fee_inputs,
+        fee_outputs: data.fee_outputs,
       },
       // This refers to the keys of the following types object.
-      primaryType: 'OmniverseUTXO',
+      primaryType: 'Deploy',
       types: {
         // This refers to the domain the contract is hosted on.
         EIP712Domain: [
@@ -2293,21 +2299,14 @@ const initializeFormElements = () => {
           { name: 'verifyingContract', type: 'address' },
         ],
         Deploy: [
-          { name: 'metadata', type: 'DeployMetadata' },
-          { name: 'fee_inputs', type: 'Input[]' },
-          { name: 'fee_outputs', type: 'Output[]' }
-        ],
-        OmniverseUTXO: [
-          { name: 'tx_type', type: 'string' },
-          { name: 'detail', type: 'Deploy' }
-        ],
-        DeployMetadata: [
           { name: 'salt', type: 'bytes8' },
           { name: 'name', type: 'string' },
           { name: 'deployer', type: 'bytes32' },
           { name: 'limit', type: 'uint128' },
           { name: 'price', type: 'uint128' },
-          { name: 'total_supply', type: 'uint128' }
+          { name: 'total_supply', type: 'uint128' },
+          { name: 'fee_inputs', type: 'Input[]' },
+          { name: 'fee_outputs', type: 'Output[]' }
         ],
         Input: [
           { name: 'txid', type: 'bytes32' },
@@ -2351,12 +2350,9 @@ const initializeFormElements = () => {
       // This defines the message you're proposing the user to sign, is dapp-specific, and contains
       // anything you want. There are no required fields. Be as explicit as possible when building out
       // the message schema.
-      message: {
-        tx_type: 'Mint',
-        detail: data
-      },
+      message: data,
       // This refers to the keys of the following types object.
-      primaryType: 'OmniverseUTXO',
+      primaryType: 'Mint',
       types: {
         // This refers to the domain the contract is hosted on.
         EIP712Domain: [
@@ -2370,10 +2366,6 @@ const initializeFormElements = () => {
           { name: 'outputs', type: 'Output[]' },
           { name: 'fee_inputs', type: 'Input[]' },
           { name: 'fee_outputs', type: 'Output[]' }
-        ],
-        OmniverseUTXO: [
-          { name: 'tx_type', type: 'string' },
-          { name: 'detail', type: 'Mint' }
         ],
         Input: [
           { name: 'txid', type: 'bytes32' },
@@ -2417,12 +2409,9 @@ const initializeFormElements = () => {
       // This defines the message you're proposing the user to sign, is dapp-specific, and contains
       // anything you want. There are no required fields. Be as explicit as possible when building out
       // the message schema.
-      message: {
-        tx_type: 'Transfer',
-        detail: data
-      },
+      message: data,
       // This refers to the keys of the following types object.
-      primaryType: 'OmniverseUTXO',
+      primaryType: 'Transfer',
       types: {
         // This refers to the domain the contract is hosted on.
         EIP712Domain: [
@@ -2437,10 +2426,6 @@ const initializeFormElements = () => {
           { name: 'outputs', type: 'Output[]' },
           { name: 'fee_inputs', type: 'Input[]' },
           { name: 'fee_outputs', type: 'Output[]' }
-        ],
-        OmniverseUTXO: [
-          { name: 'tx_type', type: 'string' },
-          { name: 'detail', type: 'Transfer' }
         ],
         Input: [
           { name: 'txid', type: 'bytes32' },
@@ -2534,26 +2519,26 @@ const initializeFormElements = () => {
    * Sign Typed Data V4
    */
   signTypedDataV4.onclick = async () => {
-    // await deploy({
-    //   metadata: {
-    //     salt: "0x1122334455667788",
-    //     name: "test_token",
-    //     deployer: "0x1122334455667788112233445566778811223344556677881122334455667788",
-    //     limit: "1234605616436508552",
-    //     price: "1234605616436508552",
-    //     total_supply: "1234605616436508552"
-    //   },
-    //   fee_inputs: [{
-    //     txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
-    //     index: "287454020",
-    //     amount: "1234605616436508552",
-    //     address: "0x20c7141c90c2346eae1c07e739222ae815b7fa839ea7931e27340bedb3603c70"
-    //   }],
-    //   fee_outputs: [{
-    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
-    //     amount: "1234605616436508552"
-    //   }]
-    // });
+    await deploy({
+      metadata: {
+        salt: "0x1122334455667788",
+        name: "test_token",
+        deployer: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        limit: "1234605616436508552",
+        price: "1234605616436508552",
+        total_supply: "1234605616436508552"
+      },
+      fee_inputs: [{
+        txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        index: "287454020",
+        amount: "1234605616436508552",
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+      }],
+      fee_outputs: [{
+        address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+        amount: "1234605616436508552"
+      }]
+    });
     // await mint({
     //   asset_id: '0x1122334455667788112233445566778811223344556677881122334455667788',
     //   outputs: [{
@@ -2571,29 +2556,29 @@ const initializeFormElements = () => {
     //     amount: "1234605616436508552"
     //   }]
     // });
-    await transfer({
-      asset_id: '0x1122334455667788112233445566778811223344556677881122334455667788',
-      inputs: [{
-        txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
-        index: "287454020",
-        amount: "1234605616436508552",
-        address: "0x1122334455667788112233445566778811223344556677881122334455667788"
-      }],
-      outputs: [{
-        address: "0x1122334455667788112233445566778811223344556677881122334455667788",
-        amount: "1234605616436508552"
-      }],
-      fee_inputs: [{
-        txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
-        index: "287454020",
-        amount: "1234605616436508552",
-        address: "0x1122334455667788112233445566778811223344556677881122334455667788"
-      }],
-      fee_outputs: [{
-        address: "0x1122334455667788112233445566778811223344556677881122334455667788",
-        amount: "1234605616436508552"
-      }]
-    });
+    // await transfer({
+    //   asset_id: '0x1122334455667788112233445566778811223344556677881122334455667788',
+    //   inputs: [{
+    //     txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     index: "287454020",
+    //     amount: "1234605616436508552",
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+    //   }],
+    //   outputs: [{
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     amount: "1234605616436508552"
+    //   }],
+    //   fee_inputs: [{
+    //     txid: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     index: "287454020",
+    //     amount: "1234605616436508552",
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788"
+    //   }],
+    //   fee_outputs: [{
+    //     address: "0x1122334455667788112233445566778811223344556677881122334455667788",
+    //     amount: "1234605616436508552"
+    //   }]
+    // });
   };
 
   /**
